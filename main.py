@@ -17,12 +17,17 @@ def main():
     # set up clock to use for configuring the frame rate
     clock = pygame.time.Clock()
 
-    sky_surface = pygame.image.load("graphics/sky.png")
-    ground_surface = pygame.image.load("graphics/ground.png")
+    sky_surface = pygame.image.load("graphics/sky.png").convert()
+    ground_surface = pygame.image.load("graphics/ground.png").convert()
     text_surface = test_font.render("My game", False, "black")
-    snail_surface = pygame.image.load("graphics/snail/snail1.png")
 
-    snail_x_pos = 600
+    # Creating a Snail rectangle
+    snail_surf = pygame.image.load("graphics/snail/snail1.png").convert_alpha()
+    snail_rect = snail_surf.get_rect(midbottom = (600, 300))
+
+    # Creating a player rectangle
+    player_surf = pygame.image.load("graphics/Player/player_walk_1.png").convert_alpha()
+    player_rect = player_surf.get_rect(midbottom = (80, 300))
 
     running = True
     while running:
@@ -36,11 +41,10 @@ def main():
         screen.blit(text_surface, (300, 50))
 
         # dynamic part of the screen
-        snail_x_pos -= 4
-
-        if snail_x_pos <=0:
-            snail_x_pos = 800
-        screen.blit(snail_surface, (snail_x_pos, 250))
+        snail_rect.x -= 4
+        if snail_rect.right <=0: snail_rect.left = 800 
+        screen.blit(snail_surf, snail_rect)
+        screen.blit(player_surf, player_rect)
 
         pygame.display.update()
         clock.tick(60)  #sets frame rate to 60, i.e, changes the images/surfaces 60 times per second
