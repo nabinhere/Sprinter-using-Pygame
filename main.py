@@ -36,12 +36,15 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            
+                     
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    player_gravity = -20
-                
+                    if (event.key == pygame.K_SPACE) and (player_rect.bottom == 300):
+                        player_gravity = -20
 
+            if pygame.mouse.get_pressed()[0]:
+                if player_rect.collidepoint(pygame.mouse.get_pos()) and (player_rect.bottom == 300):
+                    player_gravity = -20
+                          
         # static part/images on the screen
         screen.blit(sky_surface, (0,0))
         screen.blit(ground_surface, (0, 300))
@@ -56,9 +59,9 @@ def main():
 
         player_gravity +=1
         player_rect.bottom += player_gravity
+        if player_rect.bottom > 300: player_rect.bottom = 300
         screen.blit(player_surf, player_rect)
-
-                                                                           
+                                                                 
         pygame.display.update()
         clock.tick(60)  #sets frame rate to 60, i.e, changes the images/surfaces 60 times per second
 
