@@ -17,16 +17,18 @@ font = pygame.font.Font("font/Pixeltype.ttf", 50)
 
 # Function to display the score
 def display_score(start_time):
-     current_time = pygame.time.get_ticks() - start_time 
+     current_time = pygame.time.get_ticks() - start_time
      current_time /= 1000   #convert milliseconds to seconds
      score_surf = font.render(f"Score: {int(current_time)}", False, (64,64,64))
      score_rect = score_surf.get_rect(centerx = 400, centery = 50)
      screen.blit(score_surf, score_rect)
+     return current_time
 
 def main():
 
     game_active = True
     start_time = 0
+    score = 0
 
     sky_surface = pygame.image.load("graphics/sky.png").convert()
     ground_surface = pygame.image.load("graphics/ground.png").convert()
@@ -41,6 +43,19 @@ def main():
     player_surf = pygame.image.load("graphics/Player/player_walk_1.png").convert_alpha()
     player_rect = player_surf.get_rect(midbottom = (80, 300))
     player_gravity = 0
+
+    # Intro Screen
+    player_stand_surf = pygame.image.load("graphics/Player/player_stand.png").convert_alpha()
+    player_stand_surf = pygame.transform.rotozoom(player_stand_surf, 0, 2)
+    player_stand_rect = player_stand_surf.get_rect(center = (400, 200))
+
+    #Game name surface
+    game_name_surf = font.render("Snail Sprint", False,  (125, 176, 170))
+    game_name_rect = game_name_surf.get_rect(center = (400, 50))
+
+    #Instructions surface
+    instruction_surf = font.render("Press Space Key to restart", False,  (125, 176, 170))
+    instruction_rect = instruction_surf.get_rect(center = (400, 350))
 
     running = True
     while running:
@@ -68,7 +83,7 @@ def main():
             screen.blit(ground_surface, (0, 300))
             # pygame.draw.rect(screen, "#c0e8ec", score_rect)
             # pygame.draw.rect(screen, "#c0e8ec", score_rect, 6)
-            display_score(start_time)
+            score = display_score(start_time)
 
             # dynamic part of the screen
             snail_rect.x -= 4
@@ -85,7 +100,13 @@ def main():
                 game_active = False
 
         else:
-            screen.fill("Yellow")
+            screen.fill((85, 99, 161))
+            screen.blit(player_stand_surf, player_stand_rect)
+            screen.blit(game_name_surf, game_name_rect)
+            screen.blit(instruction_surf, instruction_rect)
+            score_surf = font.render(f"Score: {int(score)}", False, (125, 176, 170))
+            score_rect = score_surf.get_rect(center = (400, 100))
+            screen.blit(score_surf, score_rect)
                                                                  
         pygame.display.update()
         clock.tick(60)  #sets frame rate to 60, i.e, changes the images/surfaces 60 times per second
